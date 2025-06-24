@@ -16,7 +16,7 @@
   - API endpoint examples with cURL commands
   - Environment variable configuration
   - Testing instructions
-
+  
 ### 3. Architecture Diagram
 - ✅ **ASCII architecture diagram** in README showing:
   - Client → Express Server → MongoDB

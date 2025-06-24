@@ -1,0 +1,104 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: vendor-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: vendor-integration
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - vendor-network
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: vendor-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - vendor-network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vendor-api
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      MONGODB_URI: mongodb://admin:password@mongodb:27017/vendor-integration?authSource=admin
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      - mongodb
+      - redis
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - vendor-network
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vendor-worker
+    restart: unless-stopped
+    command: npm run worker
+    environment:
+      NODE_ENV: production
+      MONGODB_URI: mongodb://admin:password@mongodb:27017/vendor-integration?authSource=admin
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      - mongodb
+      - redis
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - vendor-network
+
+  sync-vendor:
+    build:
+      context: .
+      dockerfile: Dockerfile.mock
+    container_name: vendor-sync-mock
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      VENDOR_TYPE: sync
+    networks:
+      - vendor-network
+
+  async-vendor:
+    build:
+      context: .
+      dockerfile: Dockerfile.mock
+    container_name: vendor-async-mock
+    restart: unless-stopped
+    ports:
+      - "3002:3002"
+    environment:
+      PORT: 3002
+      VENDOR_TYPE: async
+    networks:
+      - vendor-network
+
+volumes:
+  mongodb_data:
+  redis_data:
+
+networks:
+  vendor-network:
+    driver: bridge 

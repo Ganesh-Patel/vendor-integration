@@ -1,0 +1,156 @@
+{
+  "info": {
+    "name": "Vendor Integration API",
+    "description": "Multi-vendor data fetch service API collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": ["{{base_url}}"],
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "Create Job",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"payload\": {\n    \"userId\": 12345,\n    \"data\": {\n      \"query\": \"user_profile_lookup\",\n      \"filters\": [\"active\", \"verified\"],\n      \"metadata\": {\n        \"source\": \"postman_test\",\n        \"timestamp\": \"2023-12-01T10:00:00.000Z\"\n      }\n    }\n  }\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/jobs",
+          "host": ["{{base_url}}"],
+          "path": ["api", "jobs"]
+        }
+      }
+    },
+    {
+      "name": "Get Job Status",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/jobs/{{request_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "jobs", "{{request_id}}"]
+        }
+      }
+    },
+    {
+      "name": "List Jobs",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/jobs?status=complete&vendor=sync-vendor&limit=10&page=1",
+          "host": ["{{base_url}}"],
+          "path": ["api", "jobs"],
+          "query": [
+            {
+              "key": "status",
+              "value": "complete"
+            },
+            {
+              "key": "vendor",
+              "value": "sync-vendor"
+            },
+            {
+              "key": "limit",
+              "value": "10"
+            },
+            {
+              "key": "page",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Vendor Webhook",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": \"vendor_job_123\",\n  \"data\": {\n    \"userId\": 12345,\n    \"query\": \"user_profile\"\n  },\n  \"rawData\": {\n    \"userEmail\": \"user@example.com\",\n    \"phoneNumber\": \"+1234567890\",\n    \"address\": \"123 Main St, City, State 12345\",\n    \"preferences\": [\"pref1\", \"pref2\"]\n  }\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/vendor-webhook/{{vendor_type}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "vendor-webhook", "{{vendor_type}}"]
+        }
+      }
+    },
+    {
+      "name": "Sync Vendor Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{sync_vendor_url}}/health",
+          "host": ["{{sync_vendor_url}}"],
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "Async Vendor Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{async_vendor_url}}/health",
+          "host": ["{{async_vendor_url}}"],
+          "path": ["health"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "sync_vendor_url",
+      "value": "http://localhost:3001",
+      "type": "string"
+    },
+    {
+      "key": "async_vendor_url",
+      "value": "http://localhost:3002",
+      "type": "string"
+    },
+    {
+      "key": "request_id",
+      "value": "550e8400-e29b-41d4-a716-446655440000",
+      "type": "string"
+    },
+    {
+      "key": "vendor_type",
+      "value": "async-vendor",
+      "type": "string"
+    }
+  ]
+} 

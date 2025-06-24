@@ -1,0 +1,170 @@
+{
+  "info": {
+    "name": "Vendor Integration Service",
+    "description": "API collection for the Vendor Integration Service with job management, status checking, and vendor webhook handling",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        },
+        "description": "Check the health status of the service"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Job",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"payload\": {\n    \"userId\": 12345,\n    \"data\": {\n      \"query\": \"sample query\",\n      \"timestamp\": \"2024-01-01T00:00:00.000Z\",\n      \"metadata\": {\n        \"source\": \"postman\",\n        \"priority\": \"high\"\n      }\n    }\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/jobs",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "jobs"]
+        },
+        "description": "Create a new job with payload data"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Job Status",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/jobs/{{requestId}}/status",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "jobs", "{{requestId}}", "status"]
+        },
+        "description": "Get the status of a specific job by request ID"
+      },
+      "response": []
+    },
+    {
+      "name": "List Jobs",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/jobs?limit=10&offset=0",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "jobs"],
+          "query": [
+            {
+              "key": "limit",
+              "value": "10"
+            },
+            {
+              "key": "offset",
+              "value": "0"
+            }
+          ]
+        },
+        "description": "List jobs with pagination support"
+      },
+      "response": []
+    },
+    {
+      "name": "Vendor Webhook",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Vendor-Signature",
+            "value": "{{vendorSignature}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"requestId\": \"{{requestId}}\",\n  \"status\": \"completed\",\n  \"result\": {\n    \"data\": \"vendor response data\",\n    \"timestamp\": \"2024-01-01T00:00:00.000Z\"\n  },\n  \"metadata\": {\n    \"vendor\": \"test-vendor\",\n    \"processingTime\": 1500\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/webhook/vendor",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "webhook", "vendor"]
+        },
+        "description": "Handle vendor webhook callbacks with job updates"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Job Details",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/jobs/{{requestId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "jobs", "{{requestId}}"]
+        },
+        "description": "Get detailed information about a specific job"
+      },
+      "response": []
+    },
+    {
+      "name": "Cancel Job",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/jobs/{{requestId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "jobs", "{{requestId}}"]
+        },
+        "description": "Cancel a job by request ID"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Service Stats",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/stats",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "stats"]
+        },
+        "description": "Get service statistics and metrics"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "requestId",
+      "value": "550e8400-e29b-41d4-a716-446655440000",
+      "type": "string"
+    },
+    {
+      "key": "vendorSignature",
+      "value": "test-signature-123",
+      "type": "string"
+    }
+  ]
+} 

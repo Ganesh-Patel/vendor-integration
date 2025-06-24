@@ -1,0 +1,14 @@
+{
+  "payload": {
+    "userId": 12345,
+    "data": {
+      "query": "user_profile_lookup",
+      "filters": ["active", "verified", "premium"],
+      "metadata": {
+        "source": "load_test",
+        "timestamp": "2023-12-01T10:00:00.000Z",
+        "priority": "high"
+      }
+    }
+  }
+} 

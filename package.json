@@ -1,0 +1,54 @@
+{
+  "name": "vendor-integration-service",
+  "version": "1.0.0",
+  "description": "Multi-vendor data fetch service with queue management",
+  "author": "Ganesh Patel",
+  "license": "MIT",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "worker": "node src/worker.js",
+    "test": "node tests/test-runner.js",
+    "test:setup": "docker-compose -f docker-compose.test.yml up -d",
+    "test:teardown": "docker-compose -f docker-compose.test.yml down -v",
+    "test:full": "npm run test:setup && sleep 5 && NODE_ENV=test npm test && npm run test:teardown",
+    "test:simple": "NODE_ENV=test node tests/simple.test.js",
+    "test:unit": "node --test tests/unit.test.js",
+    "test:integration": "node --test tests/integration.test.js",
+    "test:load": "node --test tests/load-balancing.test.js",
+    "test:load-test-only": "node tests/test-runner.js --load-test-only",
+    "test:mock-only": "node tests/test-runner.js --mock-test-only",
+    "load-test": "npx artillery run load-test/load-test.js",
+    "mock-vendor": "node mocks/vendor-mock.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.10.0",
+    "helmet": "^7.0.0",
+    "mongoose": "^7.5.0",
+    "redis": "^4.6.7",
+    "uuid": "^9.0.0",
+    "winston": "^3.10.0"
+  },
+  "devDependencies": {
+    "artillery": "^2.0.0-27",
+    "autocannon": "^8.0.0",
+    "chai": "^4.3.7",
+    "nodemon": "^3.0.1",
+    "sinon": "^15.1.0",
+    "supertest": "^6.3.3"
+  },
+  "keywords": [
+    "vendor",
+    "integration",
+    "queue",
+    "redis",
+    "mongodb",
+    "express",
+    "api"
+  ]
+}
